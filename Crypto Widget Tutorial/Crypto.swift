@@ -6,6 +6,8 @@
 //  Copyright © 2017 Connor Van Ooyen. All rights reserved.
 //
 
+//working?
+
 import Foundation
 
 struct Crypto: Codable {
