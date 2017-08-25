@@ -8,6 +8,24 @@
 
 import UIKit
 
+class SearchTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var coinTicker: UILabel!
+    @IBOutlet weak var addBtn: UIButton!
+    @IBAction func addBtn(_ sender: Any) {
+        
+    }
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+    }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+    
+}
+
 class SearchTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate {
     
     @IBOutlet weak var tblSearchResults: UITableView!
@@ -16,9 +34,12 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     var shouldShowSearchResults = false
     var searchController: UISearchController!
     var customSearchController: CustomSearchController!
+    var myMainTableViewController: MainTableViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        myMainTableViewController = MainTableViewController()
         
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
@@ -68,13 +89,13 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Configure the cell...
-        let cell = tableView.dequeueReusableCell(withIdentifier: "idCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "idCell", for: indexPath) as! SearchTableViewCell
         
         if shouldShowSearchResults {
-            cell.textLabel?.text = filteredArray[indexPath.row]
+            cell.coinTicker.text = filteredArray[indexPath.row]
         }
         else {
-            cell.textLabel?.text = dataArray[indexPath.row]
+            cell.coinTicker.text = dataArray[indexPath.row]
         }
 
         return cell
@@ -82,11 +103,25 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     
     func loadListOfCoins() {
         
-        dataArray = ["BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH", "BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH",]
+        let currCoinArray = myMainTableViewController?.coins
+        dataArray = ["BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH", "BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH"]
+        
+        compareArrays(array1: currCoinArray!, array2: &dataArray)
         
         // Reload the tableview.
         tblSearchResults.reloadData()
         
+    }
+    
+    func compareArrays(array1: [String], array2: inout [String]) { //inout makes mutable
+        
+        for element in array1 {
+            if array2.contains(element) {
+                if let itemToRemoveIndex = array2.index(of: element) {
+                    array2.remove(at: itemToRemoveIndex)
+                }
+            }
+        }
     }
     
     func configureCustomSearchController() {

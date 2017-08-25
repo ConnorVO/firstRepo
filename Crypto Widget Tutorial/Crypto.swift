@@ -36,9 +36,12 @@ struct Crypto: Codable {
         
     }
     
-    static func getData (from:String, to:String, completion: @escaping ([Crypto]) -> ()) {
+    static func getData (from:[String], to:String, completion: @escaping ([Crypto]) -> ()) {
         
-        let url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=\(from)&tsyms=\(to)"
+        let fromString = arrayToString(withArray: from)
+        //let toString = arrayToString(withArray: to)
+        
+        let url = "https://min-api.cryptocompare.com/data/pricemultifull?fsyms=\(fromString)&tsyms=\(to)"
         let request = URLRequest(url: URL(string: url)!)
         
         let task = URLSession.shared.dataTask(with: request) { (data:Data?, response:URLResponse?, error:Error?) in
@@ -47,27 +50,33 @@ struct Crypto: Codable {
             
             if let data = data {
                 
-                do {
-                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] {
-                        if let raw = json["RAW"] as? [String:Any] {
-                            if let btc = raw["BTC"] as? [String:Any] {
-                                if let usd = btc["USD"] as? [String:Any] {
-                                    if let cryptoObject = try? Crypto(json: usd) {
-                                        cryptoArray.append(cryptoObject)
+                for element in from {
+                
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] {
+                            if let raw = json["RAW"] as? [String:Any] {
+                                if let btc = raw[element] as? [String:Any] {
+                                    if let usd = btc["USD"] as? [String:Any] {
+                                        if let cryptoObject = try? Crypto(json: usd) {
+                                            cryptoArray.append(cryptoObject)
+                                        }
                                     }
                                 }
                             }
                         }
+                    }catch {
+                        print(error.localizedDescription)
                     }
-                }catch {
-                    print(error.localizedDescription)
                 }
-                
                 completion(cryptoArray)
                 
             }
         }
         task.resume()
     }
-    
+}
+
+func arrayToString(withArray array: [String]) -> String {
+    let stringRepresentation = array.joined(separator: ",")
+    return stringRepresentation
 }

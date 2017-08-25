@@ -28,11 +28,47 @@ class MainTableViewCell: UITableViewCell {
 
 class MainTableViewController: UITableViewController {
 
-    var coins = ["BTC", "KRX", "ZRC", "ETH", "XRP", "BTC", "KRX", "ZRC", "ETH", "XRP"]
-    var coinPrice = [2048.25, 12.53, 4.32, 245.65, 0.14, 2048.25, 12.53, 4.32, 245.65, 0.14]
+    var coins = ["BTC", "ZRC", "ETH", "XRP", "BTC", "ZRC", "ETH", "XRP"]
+    //var coinPrice = [2048.25, 12.53, 4.32, 245.65, 0.14, 2048.25, 12.53, 4.32, 245.65, 0.14]
     
-    //var searchBar:UISearchBar = UISearchBar()
-
+    var market:[String] = []
+    var price:[Double] = []
+    var change:[Double] = []
+    var changePct:[Double] = []
+    
+   
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        Crypto.getData(from: coins, to:"USD") { (results:[Crypto]) in
+            //loop through results with completion handler to know when data is set
+            self.dataLoop(withResults: results, completion: self.printVariables)
+        }
+    }
+    
+    func dataLoop(withResults results:[Crypto], completion: () -> Void ) {
+        print("Results: ", results)
+        for result in results {
+            self.market.append(result.market)
+            self.price.append(result.price.rounded(toPlaces: 2))
+            self.change.append(result.change.rounded(toPlaces: 2))
+            self.changePct.append(result.changePct.rounded(toPlaces: 2))
+        }
+        completion()
+    }
+    
+    func printVariables() {
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        /*for var i in 0..<market.count {
+            print("Market: ", market[i])
+            print("Price: ", price[i].rounded(toPlaces: 2))
+            print("Change: ", change[i].rounded(toPlaces: 2))
+            print("ChangePct: ", changePct[i].rounded(toPlaces: 2))
+        }*/
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -43,16 +79,10 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {return 1}
-        if section == 1 {return coins.count}
+        if section == 1 {return price.count} //use price to ensure stuff is loaded
         
         return 30
     }
-    
-    /*override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        setup()
-    }*/
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -83,8 +113,8 @@ class MainTableViewController: UITableViewController {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath) as! MainTableViewCell
             
             cell.coinTicker?.text = coins[indexPath.row]
-            cell.coinPrice?.text = String(coinPrice[indexPath.row])
-            cell.percentChange?.text = "+0.14%"
+            cell.coinPrice?.text = String(price[indexPath.row])
+            cell.percentChange?.text = String(changePct[indexPath.row]) + "%"
             
              return cell
         }
@@ -122,86 +152,12 @@ class MainTableViewController: UITableViewController {
             tableView.endUpdates()
         }
     }
-    
-   /* func setup() {
-        
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(down))
-        swipeDown.direction = .down
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(up))
-        swipeUp.direction = .up
-        
-        self.view.addGestureRecognizer(swipeDown)
-        self.view.addGestureRecognizer(swipeUp)
-        
-        searchBar = UISearchBar(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: 40.0))
-        
-        searchBar.backgroundColor = UIColor.red
-        self.view.addSubview(searchBar)
-        
-        
-    }*/
-    
-    /* @objc func down(sender: UIGestureRecognizer) {
-        print("down")
-        //show bar
-        UIView.animate(withDuration: 1.0, animations: { () -> Void in
-            self.searchBar.frame = CGRect(x: 0.0, y: 64.0, width: self.view.frame.width, height: 40.0)
-        }, completion: { (Bool) -> Void in
-        })
+}
+
+extension Double {
+    /// Rounds the double to decimal places value
+    func rounded(toPlaces places:Int) -> Double {
+        let divisor = pow(10.0, Double(places))
+        return (self * divisor).rounded() / divisor
     }
-    
-    @objc func up(sender: UIGestureRecognizer) {
-        print("up")
-        UIView.animate(withDuration: 1.0, animations: { () -> Void in
-            self.searchBar.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 40.0)
-        }, completion: { (Bool) -> Void in
-        })
-    } */
-    
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

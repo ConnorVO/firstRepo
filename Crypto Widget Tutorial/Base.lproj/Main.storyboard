@@ -117,13 +117,44 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idCell" id="NQt-el-7LQ">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="idCell" id="NQt-el-7LQ" customClass="SearchTableViewCell" customModule="Crypto_Widget_Tutorial" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="NQt-el-7LQ" id="hAI-2n-MOg">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BTC" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2fK-zp-Zfp">
+                                            <rect key="frame" x="8" y="0.0" width="37" height="44"/>
+                                            <fontDescription key="fontDescription" type="system" weight="medium" pointSize="19"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Ev-uL-Zi0">
+                                            <rect key="frame" x="345" y="0.0" width="30" height="44"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="29"/>
+                                            <state key="normal" title="+">
+                                                <color key="titleColor" red="0.96178852540000004" green="1" blue="0.99364478509999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="addBtn:" destination="NQt-el-7LQ" eventType="touchUpInside" id="UJC-k3-ayk"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <constraints>
+                                        <constraint firstItem="2fK-zp-Zfp" firstAttribute="leading" secondItem="hAI-2n-MOg" secondAttribute="leading" constant="8" id="E3w-lN-1vF"/>
+                                        <constraint firstAttribute="bottom" secondItem="8Ev-uL-Zi0" secondAttribute="bottom" id="Nhk-T2-SEq"/>
+                                        <constraint firstAttribute="bottom" secondItem="2fK-zp-Zfp" secondAttribute="bottom" id="g4E-h8-eI4"/>
+                                        <constraint firstItem="8Ev-uL-Zi0" firstAttribute="top" secondItem="hAI-2n-MOg" secondAttribute="top" id="lsn-DK-YY3"/>
+                                        <constraint firstItem="2fK-zp-Zfp" firstAttribute="top" secondItem="hAI-2n-MOg" secondAttribute="top" id="pBg-Cw-p8u"/>
+                                        <constraint firstAttribute="trailing" secondItem="8Ev-uL-Zi0" secondAttribute="trailing" id="skm-xA-d6H"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="addBtn" destination="8Ev-uL-Zi0" id="v0L-iY-lUD"/>
+                                    <outlet property="coinTicker" destination="2fK-zp-Zfp" id="ifT-yh-9pF"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -137,7 +168,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bwh-Jo-XPp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1026" y="114"/>
+            <point key="canvasLocation" x="1024.8" y="113.79310344827587"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="k0I-w0-oxg">
