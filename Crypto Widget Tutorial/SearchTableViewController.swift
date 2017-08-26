@@ -34,7 +34,7 @@ class SearchTableViewCell: UITableViewCell {
 class SearchTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomCellDelegate, CustomSearchControllerDelegate {
     
     @IBOutlet weak var tblSearchResults: UITableView!
-    var dataArray = [String]()
+    var dataArray = DataArrayHelper.getDataArray()
     var filteredArray = [String]()
     var shouldShowSearchResults = false
     var searchController: UISearchController!
@@ -45,8 +45,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)!
-        getFromStorage()
+        coins = StorageHelper.getFromStorage()
         
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
@@ -60,10 +59,6 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         swipeRightVar.direction = .right
         self.view!.addGestureRecognizer(swipeRightVar)
         
-    }
-    
-    func getFromStorage() {
-        coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)!
     }
     
     //swipe right to go back
@@ -83,18 +78,13 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         }
         
         coins.append(selectedItem)
-        setStorage()
+        StorageHelper.setCoinStorage(array: coins)
         
         loadListOfCoins()
         myMainTableViewController.tableView.reloadData()
         
         self.tableView.reloadData()
             
-    }
-    
-    func setStorage() {
-        defaults.set(coins, forKey: defaultsKeys.coinArrayStorage)
-        print(coins)
     }
 
     override func didReceiveMemoryWarning() {
@@ -138,8 +128,6 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     }
     
     func loadListOfCoins() {
-        
-        dataArray = ["BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH", "BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH"]
         
         compareArrays(array1: coins, array2: &dataArray)
         

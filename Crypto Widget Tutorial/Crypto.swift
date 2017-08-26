@@ -37,7 +37,7 @@ struct Crypto: Codable {
     }
     
     static func getData (from:[String], to:String, completion: @escaping ([Crypto]) -> ()) {
-        
+   
         let fromString = arrayToString(withArray: from)
         //let toString = arrayToString(withArray: to)
         
@@ -50,7 +50,7 @@ struct Crypto: Codable {
             
             if let data = data {
                 
-                for element in from {
+                for (index, element) in from.enumerated() {
                 
                     do {
                         if let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] {
@@ -61,6 +61,8 @@ struct Crypto: Codable {
                                             cryptoArray.append(cryptoObject)
                                         }
                                     }
+                                } else {
+                                    continue
                                 }
                             }
                         }
@@ -68,6 +70,7 @@ struct Crypto: Codable {
                         print(error.localizedDescription)
                     }
                 }
+
                 completion(cryptoArray)
                 
             }

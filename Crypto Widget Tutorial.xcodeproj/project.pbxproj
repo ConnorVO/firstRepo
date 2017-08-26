@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F6471DC31F51D26D003FBBDA /* StorageHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6471DC21F51D26D003FBBDA /* StorageHelper.swift */; };
+		F6471DC51F51D65E003FBBDA /* CryptoDataGetter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6471DC41F51D65E003FBBDA /* CryptoDataGetter.swift */; };
+		F6471DCB1F51DB45003FBBDA /* DataArrayHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6471DCA1F51DB45003FBBDA /* DataArrayHelper.swift */; };
 		F6B50E6A1F4B99CD006C1755 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B50E691F4B99CD006C1755 /* AppDelegate.swift */; };
 		F6B50E6C1F4B99CD006C1755 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6B50E6B1F4B99CD006C1755 /* ViewController.swift */; };
 		F6B50E6F1F4B99CD006C1755 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F6B50E6D1F4B99CD006C1755 /* Main.storyboard */; };
@@ -21,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		F6471DC21F51D26D003FBBDA /* StorageHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageHelper.swift; sourceTree = "<group>"; };
+		F6471DC41F51D65E003FBBDA /* CryptoDataGetter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoDataGetter.swift; sourceTree = "<group>"; };
+		F6471DCA1F51DB45003FBBDA /* DataArrayHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataArrayHelper.swift; sourceTree = "<group>"; };
 		F6B50E661F4B99CD006C1755 /* Crypto Widget Tutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Crypto Widget Tutorial.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6B50E691F4B99CD006C1755 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F6B50E6B1F4B99CD006C1755 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -75,7 +81,10 @@
 				F6B50E781F4B99CD006C1755 /* Info.plist */,
 				F6B50E701F4B99CD006C1755 /* Crypto_Widget_Tutorial.xcdatamodeld */,
 				F6B50EAD1F4D2719006C1755 /* MainTableViewController.swift */,
+				F6471DC41F51D65E003FBBDA /* CryptoDataGetter.swift */,
+				F6471DC21F51D26D003FBBDA /* StorageHelper.swift */,
 				F6B50EAF1F4DE01B006C1755 /* SearchTableViewController.swift */,
+				F6471DCA1F51DB45003FBBDA /* DataArrayHelper.swift */,
 				F6B50EB11F4DE7ED006C1755 /* CustomSearchController.swift */,
 				F6B50EB31F4DE81B006C1755 /* CustomSearchBar.swift */,
 			);
@@ -154,7 +163,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F6B50E6C1F4B99CD006C1755 /* ViewController.swift in Sources */,
+				F6471DC51F51D65E003FBBDA /* CryptoDataGetter.swift in Sources */,
+				F6471DCB1F51DB45003FBBDA /* DataArrayHelper.swift in Sources */,
 				F6B50EB01F4DE01B006C1755 /* SearchTableViewController.swift in Sources */,
+				F6471DC31F51D26D003FBBDA /* StorageHelper.swift in Sources */,
 				F6B50EB21F4DE7ED006C1755 /* CustomSearchController.swift in Sources */,
 				F6B50E721F4B99CD006C1755 /* Crypto_Widget_Tutorial.xcdatamodeld in Sources */,
 				F6B50E811F4BED81006C1755 /* Crypto.swift in Sources */,
@@ -336,6 +348,7 @@
 				F6B50E7D1F4B99CD006C1755 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
