@@ -8,12 +8,16 @@
 
 import UIKit
 
+protocol CustomCellDelegate {
+    func cellButtonTapped(cell: SearchTableViewCell)
+}
 class SearchTableViewCell: UITableViewCell {
     
+    var delegate: CustomCellDelegate?
+    
     @IBOutlet weak var coinTicker: UILabel!
-    @IBOutlet weak var addBtn: UIButton!
-    @IBAction func addBtn(_ sender: Any) {
-        
+    @IBAction func addBtn(_ sender: AnyObject) {
+        delegate?.cellButtonTapped(cell: self)
     }
     
     override func awakeFromNib() {
@@ -26,7 +30,7 @@ class SearchTableViewCell: UITableViewCell {
     
 }
 
-class SearchTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomSearchControllerDelegate {
+class SearchTableViewController: UITableViewController, UISearchResultsUpdating, UISearchBarDelegate, CustomCellDelegate, CustomSearchControllerDelegate {
     
     @IBOutlet weak var tblSearchResults: UITableView!
     var dataArray = [String]()
@@ -34,12 +38,17 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     var shouldShowSearchResults = false
     var searchController: UISearchController!
     var customSearchController: CustomSearchController!
-    var myMainTableViewController: MainTableViewController?
+    let myMainTableViewController = MainTableViewController()
+    var coins = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        myMainTableViewController = MainTableViewController()
+        /* if let coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage) {
+         print(coins)
+         } else {
+         print("nil")
+         }*/
         
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
@@ -55,14 +64,35 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         
     }
     
+    /*func getFromStorage() {
+        coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)
+        print(coins)
+    }*/
+    
     //swipe right to go back
     @objc func swipeRight(sender: UIGestureRecognizer) {
         self.navigationController?.popViewController(animated: true)
     }
     
-    /*@objc func back(sender:UIBarButtonItem){
-        self.navigationController?.popViewController(animated: true)
-    }*/
+    func cellButtonTapped(cell: SearchTableViewCell) {
+        
+        let indexPath = self.tableView.indexPathForRow(at: cell.center)!
+        var selectedItem:String = ""
+        
+        if shouldShowSearchResults {
+             selectedItem = filteredArray[indexPath.row]
+        } else {
+             selectedItem = dataArray[indexPath.row]
+        }
+        
+        myMainTableViewController.coins.append(selectedItem)
+        
+        loadListOfCoins()
+        myMainTableViewController.tableView.reloadData()
+        
+        self.tableView.reloadData()
+            
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -88,9 +118,12 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Configure the cell...
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "idCell", for: indexPath) as! SearchTableViewCell
         
+        cell.delegate = self
+        
+        //Configure the cell
         if shouldShowSearchResults {
             cell.coinTicker.text = filteredArray[indexPath.row]
         }
@@ -103,10 +136,10 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     
     func loadListOfCoins() {
         
-        let currCoinArray = myMainTableViewController?.coins
+        let currCoinArray = myMainTableViewController.coins
         dataArray = ["BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH", "BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH"]
         
-        compareArrays(array1: currCoinArray!, array2: &dataArray)
+        compareArrays(array1: currCoinArray, array2: &dataArray)
         
         // Reload the tableview.
         tblSearchResults.reloadData()

@@ -8,6 +8,13 @@
 
 import UIKit
 
+let defaults = UserDefaults.standard
+
+struct defaultsKeys {
+    static let coinArrayStorage = "coinArrayStorage"
+    static let timesOpened = "timesOpened"
+}
+
 class MainGraphTableViewCell: UITableViewCell {
     
 }
@@ -28,7 +35,7 @@ class MainTableViewCell: UITableViewCell {
 
 class MainTableViewController: UITableViewController {
 
-    var coins = ["BTC", "ZRC", "ETH", "XRP", "BTC", "ZRC", "ETH", "XRP"]
+    var coins:[String] = []
     //var coinPrice = [2048.25, 12.53, 4.32, 245.65, 0.14, 2048.25, 12.53, 4.32, 245.65, 0.14]
     
     var market:[String] = []
@@ -36,19 +43,34 @@ class MainTableViewController: UITableViewController {
     var change:[Double] = []
     var changePct:[Double] = []
     
-   
+    /*@IBAction func toSearchTable(_ sender: Any) {
+        setStorage()
+        
+        let viewController = SearchTableViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
+    }*/
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        getFromStorage()
+        getCryptoData()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.addSubview(refreshControl!)
+    }
+    
+    func getCryptoData() {
         Crypto.getData(from: coins, to:"USD") { (results:[Crypto]) in
             //loop through results with completion handler to know when data is set
-            self.dataLoop(withResults: results, completion: self.printVariables)
+            self.dataLoop(withResults: results, completion: self.reloadTable)
         }
     }
     
     func dataLoop(withResults results:[Crypto], completion: () -> Void ) {
-        print("Results: ", results)
         for result in results {
             self.market.append(result.market)
             self.price.append(result.price.rounded(toPlaces: 2))
@@ -58,17 +80,43 @@ class MainTableViewController: UITableViewController {
         completion()
     }
     
-    func printVariables() {
+    func reloadTable() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-        /*for var i in 0..<market.count {
-            print("Market: ", market[i])
-            print("Price: ", price[i].rounded(toPlaces: 2))
-            print("Change: ", change[i].rounded(toPlaces: 2))
-            print("ChangePct: ", changePct[i].rounded(toPlaces: 2))
-        }*/
     }
+    
+    @objc func refresh(_ sender: Any) {
+        self.tableView.reloadData()
+        Crypto.getData(from: coins, to:"USD") { (results:[Crypto]) in
+            //loop through results with completion handler to know when data is set
+            self.dataLoop(withResults: results, completion: self.endRefreshing)
+        }
+    }
+    
+    func endRefreshing() {
+        DispatchQueue.main.async {
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    
+    func getFromStorage() {
+        coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)!
+        print(coins)
+    }
+    
+    func setStorage() {
+         if defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)?.count == 0 || coins.count == 0 {
+            defaults.set(["BTC", "ETH"], forKey: defaultsKeys.coinArrayStorage)
+         } else {
+            defaults.set(coins, forKey: defaultsKeys.coinArrayStorage)
+         }
+    }
+    
+    func getCoinArray() -> [String]{
+        return coins
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {

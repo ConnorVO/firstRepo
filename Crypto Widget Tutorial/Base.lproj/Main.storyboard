@@ -35,7 +35,7 @@
                                                 <color key="titleColor" red="0.96178852540000004" green="1" blue="0.99364478509999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                             <connections>
-                                                <segue destination="Uca-Kb-ymP" kind="show" id="e1D-4B-9bg"/>
+                                                <segue destination="Uca-Kb-ymP" kind="show" id="a91-kI-hyb"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -137,7 +137,7 @@
                                                 <color key="titleColor" red="0.96178852540000004" green="1" blue="0.99364478509999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </state>
                                             <connections>
-                                                <action selector="addBtn:" destination="NQt-el-7LQ" eventType="touchUpInside" id="UJC-k3-ayk"/>
+                                                <action selector="addBtn:" destination="NQt-el-7LQ" eventType="touchUpInside" id="9Z2-x5-dOz"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -152,7 +152,6 @@
                                     </constraints>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="addBtn" destination="8Ev-uL-Zi0" id="v0L-iY-lUD"/>
                                     <outlet property="coinTicker" destination="2fK-zp-Zfp" id="ifT-yh-9pF"/>
                                 </connections>
                             </tableViewCell>
@@ -163,7 +162,7 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <outlet property="tblSearchResults" destination="fEw-CF-gD7" id="Q3d-EC-gZn"/>
+                        <outlet property="tblSearchResults" destination="fEw-CF-gD7" id="cAU-J2-BeA"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bwh-Jo-XPp" userLabel="First Responder" sceneMemberID="firstResponder"/>
