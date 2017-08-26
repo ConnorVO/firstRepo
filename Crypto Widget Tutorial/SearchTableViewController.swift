@@ -11,6 +11,7 @@ import UIKit
 protocol CustomCellDelegate {
     func cellButtonTapped(cell: SearchTableViewCell)
 }
+
 class SearchTableViewCell: UITableViewCell {
     
     var delegate: CustomCellDelegate?
@@ -44,11 +45,8 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        /* if let coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage) {
-         print(coins)
-         } else {
-         print("nil")
-         }*/
+        //coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)!
+        getFromStorage()
         
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
@@ -64,10 +62,9 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         
     }
     
-    /*func getFromStorage() {
-        coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)
-        print(coins)
-    }*/
+    func getFromStorage() {
+        coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)!
+    }
     
     //swipe right to go back
     @objc func swipeRight(sender: UIGestureRecognizer) {
@@ -85,13 +82,19 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
              selectedItem = dataArray[indexPath.row]
         }
         
-        myMainTableViewController.coins.append(selectedItem)
+        coins.append(selectedItem)
+        setStorage()
         
         loadListOfCoins()
         myMainTableViewController.tableView.reloadData()
         
         self.tableView.reloadData()
             
+    }
+    
+    func setStorage() {
+        defaults.set(coins, forKey: defaultsKeys.coinArrayStorage)
+        print(coins)
     }
 
     override func didReceiveMemoryWarning() {
@@ -136,10 +139,9 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     
     func loadListOfCoins() {
         
-        let currCoinArray = myMainTableViewController.coins
         dataArray = ["BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH", "BTC", "ETH", "XKR", "XRP", "RPP", "XMR", "USD", "EUR", "BCC", "BCH"]
         
-        compareArrays(array1: currCoinArray, array2: &dataArray)
+        compareArrays(array1: coins, array2: &dataArray)
         
         // Reload the tableview.
         tblSearchResults.reloadData()

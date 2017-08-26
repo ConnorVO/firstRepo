@@ -54,13 +54,15 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        getFromStorage()
-        getCryptoData()
-        
         refreshControl = UIRefreshControl()
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.addSubview(refreshControl!)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+           getFromStorage()
+           getCryptoData()
     }
     
     func getCryptoData() {
@@ -102,7 +104,6 @@ class MainTableViewController: UITableViewController {
     
     func getFromStorage() {
         coins = defaults.stringArray(forKey: defaultsKeys.coinArrayStorage)!
-        print(coins)
     }
     
     func setStorage() {
@@ -127,7 +128,7 @@ class MainTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         if section == 0 {return 1}
-        if section == 1 {return price.count} //use price to ensure stuff is loaded
+        if section == 1 {return coins.count} //use price to ensure stuff is loaded
         
         return 30
     }
