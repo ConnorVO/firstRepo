@@ -81,7 +81,6 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         StorageHelper.setCoinStorage(array: coins)
         
         loadListOfCoins()
-        myMainTableViewController.tableView.reloadData()
         
         self.tableView.reloadData()
             

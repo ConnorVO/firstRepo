@@ -28,8 +28,10 @@ class CryptoDataGetter {
     }
     
     static func dataLoop(withResults results:[Crypto], completion: () -> Void ) {
+        print("Data market: ", marketArray.count)
+        print("Data Coins: ", StorageHelper.getFromStorage().count)
         for result in results {
-            if(marketArray.count < myMainTableViewController.coins.count) {
+            if(marketArray.count < StorageHelper.getFromStorage().count) {
                 self.marketArray.append(result.market)
                 self.priceArray.append(result.price.rounded(toPlaces: 2))
                 self.changeArray.append(result.change.rounded(toPlaces: 2))
@@ -42,6 +44,7 @@ class CryptoDataGetter {
     }
     
     static func getMarketArray() -> [String] {
+        print("Data Market Array: ", marketArray.count)
         return marketArray
     }
     

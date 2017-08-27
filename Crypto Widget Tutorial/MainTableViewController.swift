@@ -39,7 +39,7 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        print("Load: ", coins)
         CryptoDataGetter.getCryptoData(from: coins)
         setDataVariables()
         
@@ -57,7 +57,6 @@ class MainTableViewController: UITableViewController {
     
     func reloadTable() {
         DispatchQueue.main.async {
-            CryptoDataGetter.getCryptoData(from: self.coins)
             self.tableView.reloadData()
         }
     }
@@ -79,6 +78,7 @@ class MainTableViewController: UITableViewController {
         price = CryptoDataGetter.getPriceArray()
         change = CryptoDataGetter.getChangeArray()
         changePct = CryptoDataGetter.getChangePctArray()
+        print("Price: ", market.count)
     }
     
     // MARK: - Table view data source
@@ -90,7 +90,6 @@ class MainTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
         if section == 0 {return 1}
         if section == 1 {
             
@@ -108,7 +107,6 @@ class MainTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         // Hide the navigation bar on the this view controller
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
     }
@@ -122,6 +120,9 @@ class MainTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        setDataVariables() //have to call here because variables not being set properly?
+        
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "graphCell", for: indexPath) as! MainGraphTableViewCell
 
@@ -132,13 +133,12 @@ class MainTableViewController: UITableViewController {
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath) as! MainTableViewCell
-            
             cell.coinTicker?.text = coins[indexPath.row]
             cell.coinPrice?.text = String(price[indexPath.row])
             cell.percentChange?.text = String(changePct[indexPath.row]) + "%"
             
             endRefreshing()
-             return cell
+            return cell
         }
     }
     
@@ -171,6 +171,7 @@ class MainTableViewController: UITableViewController {
             change.remove(at: indexPath.row)
             market.remove(at: indexPath.row)
             changePct.remove(at: indexPath.row)
+            
             StorageHelper.setCoinStorage(array: coins)
             
             // Note that indexPath is wrapped in an array:  [indexPath]
