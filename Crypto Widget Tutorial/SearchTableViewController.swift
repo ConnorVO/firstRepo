@@ -50,7 +50,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         tblSearchResults.delegate = self
         tblSearchResults.dataSource = self
         
-        loadListOfCoins()
+        loadListOfCoins(filteredOrDataArray: &dataArray)
         
         configureCustomSearchController()
         
@@ -63,6 +63,7 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
     
     //swipe right to go back
     @objc func swipeRight(sender: UIGestureRecognizer) {
+        myMainTableViewController.reloadTable()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -80,7 +81,11 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         coins.append(selectedItem)
         StorageHelper.setCoinStorage(array: coins)
         
-        loadListOfCoins()
+        if shouldShowSearchResults {
+            loadListOfCoins(filteredOrDataArray: &filteredArray)
+        } else {
+            loadListOfCoins(filteredOrDataArray: &dataArray)
+        }
         
         self.tableView.reloadData()
             
@@ -126,9 +131,9 @@ class SearchTableViewController: UITableViewController, UISearchResultsUpdating,
         return cell
     }
     
-    func loadListOfCoins() {
+    func loadListOfCoins(filteredOrDataArray array: inout [String]) {
         
-        compareArrays(array1: coins, array2: &dataArray)
+        compareArrays(array1: coins, array2: &array)
         
         // Reload the tableview.
         tblSearchResults.reloadData()

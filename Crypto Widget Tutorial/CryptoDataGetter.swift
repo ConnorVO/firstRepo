@@ -28,8 +28,9 @@ class CryptoDataGetter {
     }
     
     static func dataLoop(withResults results:[Crypto], completion: () -> Void ) {
-        print("Data market: ", marketArray.count)
-        print("Data Coins: ", StorageHelper.getFromStorage().count)
+        
+        self.emptyTheArrays() //probs not efficient, but keeps correct prices when deleting
+        
         for result in results {
             if(marketArray.count < StorageHelper.getFromStorage().count) {
                 self.marketArray.append(result.market)
@@ -38,13 +39,11 @@ class CryptoDataGetter {
                 self.changePctArray.append(result.changePct.rounded(toPlaces: 2))
             }
         }
-        
         dataIsRetrieved = true
         completion()
     }
     
     static func getMarketArray() -> [String] {
-        print("Data Market Array: ", marketArray.count)
         return marketArray
     }
     
@@ -62,5 +61,12 @@ class CryptoDataGetter {
     
     static func getDataIsRetrieved() -> Bool {
         return dataIsRetrieved
+    }
+    
+    static private func emptyTheArrays() {
+        marketArray.removeAll()
+        priceArray.removeAll()
+        changeArray.removeAll()
+        changePctArray.removeAll()
     }
 }

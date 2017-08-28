@@ -23,6 +23,7 @@ class StorageHelper {
             defaults.set(["BTC", "ETH"], forKey: defaultsKeys.coinArrayStorage)
         } else {
             defaults.set(array, forKey: defaultsKeys.coinArrayStorage)
+            
         }
     }
     

@@ -39,10 +39,6 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("Load: ", coins)
-        CryptoDataGetter.getCryptoData(from: coins)
-        setDataVariables()
-        
         refreshControl = UIRefreshControl()
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -51,19 +47,21 @@ class MainTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         CryptoDataGetter.getCryptoData(from: coins) //in here for coming back from SearchTable
-        setDataVariables()
         self.tableView.reloadData()
     }
     
     func reloadTable() {
         DispatchQueue.main.async {
+            CryptoDataGetter.getCryptoData(from: self.coins)
             self.tableView.reloadData()
         }
     }
     
     @objc func refresh(_ sender: Any) {
-        CryptoDataGetter.getCryptoData(from: coins)
-        self.tableView.reloadData()
+        DispatchQueue.main.async {
+            CryptoDataGetter.getCryptoData(from: self.coins)
+            self.tableView.reloadData()
+        }
     }
     
     func endRefreshing() {
@@ -78,7 +76,6 @@ class MainTableViewController: UITableViewController {
         price = CryptoDataGetter.getPriceArray()
         change = CryptoDataGetter.getChangeArray()
         changePct = CryptoDataGetter.getChangePctArray()
-        print("Price: ", market.count)
     }
     
     // MARK: - Table view data source
@@ -131,7 +128,7 @@ class MainTableViewController: UITableViewController {
             
 
             return cell
-        } else {
+        } else if (CryptoDataGetter.getDataIsRetrieved() && coins.count == price.count) {
             let cell = tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath) as! MainTableViewCell
             cell.coinTicker?.text = coins[indexPath.row]
             cell.coinPrice?.text = String(price[indexPath.row])
@@ -139,6 +136,8 @@ class MainTableViewController: UITableViewController {
             
             endRefreshing()
             return cell
+        } else {
+            return tableView.dequeueReusableCell(withIdentifier: "mainCell", for: indexPath)
         }
     }
     
@@ -173,6 +172,7 @@ class MainTableViewController: UITableViewController {
             changePct.remove(at: indexPath.row)
             
             StorageHelper.setCoinStorage(array: coins)
+            //CryptoDataGetter.getCryptoData(from: coins)
             
             // Note that indexPath is wrapped in an array:  [indexPath]
             tableView.deleteRows(at: [indexPath], with: .automatic)
